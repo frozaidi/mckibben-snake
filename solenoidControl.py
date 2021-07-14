@@ -34,11 +34,6 @@ class SolenoidControl:
     def solenoidDeflate(self, actuatorNum):
         print("Deflating")
         print(actuatorNum[1])
-        # for i in range(self.numCycles):
-        #     GPIO.output(actuatorNum[1], GPIO.LOW)
-        #     time.sleep(self.timeOn)
-        #     GPIO.output(actuatorNum[1], GPIO.HIGH)
-        #     time.sleep(self.timeOff)
         GPIO.output(actuatorNum[1], GPIO.LOW)
         time.sleep(1.0)
         GPIO.output(actuatorNum[1], GPIO.HIGH)

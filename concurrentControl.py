@@ -31,6 +31,13 @@ class SolenoidControl:
             GPIO.output(actuatorNum[0], GPIO.HIGH)
             time.sleep(self.timeOff)
 
+    def solenoidDeflate(self, actuatorNum):
+        print("Deflating")
+        print(actuatorNum[1])
+        GPIO.output(actuatorNum[1], GPIO.LOW)
+        time.sleep(1.0)
+        GPIO.output(actuatorNum[1], GPIO.HIGH)
+
     def concurrentInflation(self, actuator1, actuator2, actuator3, actuator4):
         GPIO.output(actuator1[0], GPIO.LOW)
         GPIO.output(actuator1[1], GPIO.HIGH)
