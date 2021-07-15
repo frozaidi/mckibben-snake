@@ -38,6 +38,10 @@ class SolenoidControl:
         time.sleep(2.0)
         GPIO.output(actuatorNum[1], GPIO.HIGH)
 
+    def closeValves(self, actuatorNum):
+        GPIO.output(actuatorNum[1], GPIO.HIGH)
+        GPIO.output(actuatorNum[0], GPIO.HIGH)
+
     def concurrentInflation(self, actuator1, actuator2, actuator3, actuator4):
         GPIO.output(actuator1[0], GPIO.LOW)
         GPIO.output(actuator1[1], GPIO.HIGH)
@@ -90,6 +94,11 @@ if __name__ == '__main__':
                                            actuator4)
     solenoidController.concurrentInflation(actuator1, actuator2, actuator3,
                                            actuator4)
+
+   solenoidController.closeValves(actuator1)
+   solenoidController.closeValves(actuator2)
+   solenoidController.closeValves(actuator3)
+   solenoidController.closeValves(actuator4)
 
     solenoidController.solenoidDeflate(actuator1)
     solenoidController.solenoidDeflate(actuator2)
