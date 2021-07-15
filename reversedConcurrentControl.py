@@ -91,9 +91,9 @@ if __name__ == '__main__':
     solenoidController.concurrentInflation(actuator1, actuator2, actuator3,
                                            actuator4)
 
-    solenoidController.solenoidDeflate(actuator1)
-    solenoidController.solenoidDeflate(actuator2)
-    solenoidController.solenoidDeflate(actuator3)
     solenoidController.solenoidDeflate(actuator4)
+    solenoidController.solenoidDeflate(actuator3)
+    solenoidController.solenoidDeflate(actuator2)
+    solenoidController.solenoidDeflate(actuator1)
 
     GPIO.cleanup()
