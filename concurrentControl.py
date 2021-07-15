@@ -95,10 +95,10 @@ if __name__ == '__main__':
     solenoidController.concurrentInflation(actuator1, actuator2, actuator3,
                                            actuator4)
 
-   solenoidController.closeValves(actuator1)
-   solenoidController.closeValves(actuator2)
-   solenoidController.closeValves(actuator3)
-   solenoidController.closeValves(actuator4)
+    solenoidController.closeValves(actuator1)
+    solenoidController.closeValves(actuator2)
+    solenoidController.closeValves(actuator3)
+    solenoidController.closeValves(actuator4)
 
     solenoidController.solenoidDeflate(actuator1)
     solenoidController.solenoidDeflate(actuator2)
