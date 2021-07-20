@@ -42,27 +42,27 @@ class SolenoidControl:
         GPIO.output(actuatorNum[1], GPIO.HIGH)
         GPIO.output(actuatorNum[0], GPIO.HIGH)
 
-    def concurrentInflation(self, actuator1, actuator2, actuator3, actuator4):
+    def concurrentInflation(self, actuator1, actuator2, actuator3, actuator4, period):
         GPIO.output(actuator1[0], GPIO.LOW)
         GPIO.output(actuator1[1], GPIO.HIGH)
         GPIO.output(actuator3[0], GPIO.HIGH)
         GPIO.output(actuator3[1], GPIO.LOW)
-        time.sleep(0.25)
+        time.sleep(period/2.0)
         GPIO.output(actuator2[0], GPIO.LOW)
         GPIO.output(actuator2[1], GPIO.HIGH)
         GPIO.output(actuator4[0], GPIO.HIGH)
         GPIO.output(actuator4[1], GPIO.LOW)
-        time.sleep(0.25)
+        time.sleep(period/2.0)
         GPIO.output(actuator3[0], GPIO.LOW)
         GPIO.output(actuator3[1], GPIO.HIGH)
         GPIO.output(actuator1[0], GPIO.HIGH)
         GPIO.output(actuator1[1], GPIO.LOW)
-        time.sleep(0.25)
+        time.sleep(period/2.0)
         GPIO.output(actuator4[0], GPIO.LOW)
         GPIO.output(actuator4[1], GPIO.HIGH)
         GPIO.output(actuator2[0], GPIO.HIGH)
         GPIO.output(actuator2[1], GPIO.LOW)
-        time.sleep(0.25)
+        time.sleep(period/2.0)
 
 
 if __name__ == '__main__':
@@ -86,14 +86,16 @@ if __name__ == '__main__':
     solenoidController.solenoidSetup(actuator3)
     solenoidController.solenoidSetup(actuator4)
 
+    period = float(input("Enter inflation time: "))
+
     solenoidController.concurrentInflation(actuator1, actuator2, actuator3,
-                                           actuator4)
+                                           actuator4, period)
     solenoidController.concurrentInflation(actuator1, actuator2, actuator3,
-                                           actuator4)
+                                           actuator4, period)
     solenoidController.concurrentInflation(actuator1, actuator2, actuator3,
-                                           actuator4)
+                                           actuator4, period)
     solenoidController.concurrentInflation(actuator1, actuator2, actuator3,
-                                           actuator4)
+                                           actuator4, period)
 
     solenoidController.closeValves(actuator1)
     solenoidController.closeValves(actuator2)
