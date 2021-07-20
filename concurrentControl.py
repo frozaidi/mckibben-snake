@@ -31,12 +31,13 @@ class SolenoidControl:
             GPIO.output(actuatorNum[0], GPIO.HIGH)
             time.sleep(self.timeOff)
 
-    def solenoidDeflate(self, actuatorNum):
+    def solenoidDeflate(self, actuatorArray):
         print("Deflating")
-        print(actuatorNum[1])
-        GPIO.output(actuatorNum[1], GPIO.LOW)
+        for actuator in range(len(actuatorArray)):
+            GPIO.output(actuatorArray[actuator][1], GPIO.LOW)
         time.sleep(2.0)
-        GPIO.output(actuatorNum[1], GPIO.HIGH)
+        for actuator in range(len(actuatorArray)):
+            GPIO.output(actuatorArray[actuator][1], GPIO.HIGH)
 
     def closeValves(self, actuatorNum):
         GPIO.output(actuatorNum[1], GPIO.HIGH)
@@ -73,6 +74,7 @@ if __name__ == '__main__':
     actuator2 = (35, 36)
     actuator3 = (31, 32)
     actuator4 = (23, 24)
+    actuatorArray = (actuator1, actuator2, actuator3, actuator4)
     # Set up PWM control
     dutyCycle = 1.0
     timePeriod = 0.1
@@ -102,9 +104,6 @@ if __name__ == '__main__':
     solenoidController.closeValves(actuator3)
     solenoidController.closeValves(actuator4)
 
-    solenoidController.solenoidDeflate(actuator1)
-    solenoidController.solenoidDeflate(actuator2)
-    solenoidController.solenoidDeflate(actuator3)
-    solenoidController.solenoidDeflate(actuator4)
+    solenoidController.solenoidDeflate(actuatorArray)
 
     GPIO.cleanup()
