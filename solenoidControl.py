@@ -82,6 +82,29 @@ class SolenoidControl:
             GPIO.output(actuatorArray[1][1], GPIO.LOW)
             time.sleep(self.inflationTime/2.0)
 
+    def revConcurrentInflation(self, actuatorArray):
+        for cycle in range(self.numCycles):
+            GPIO.output(actuatorArray[3][0], GPIO.LOW)
+            GPIO.output(actuatorArray[3][1], GPIO.HIGH)
+            GPIO.output(actuatorArray[1][0], GPIO.HIGH)
+            GPIO.output(actuatorArray[1][1], GPIO.LOW)
+            time.sleep(self.inflationTime/2.0)
+            GPIO.output(actuatorArray[2][0], GPIO.LOW)
+            GPIO.output(actuatorArray[2][1], GPIO.HIGH)
+            GPIO.output(actuatorArray[0][0], GPIO.HIGH)
+            GPIO.output(actuatorArray[0][1], GPIO.LOW)
+            time.sleep(self.inflationTime/2.0)
+            GPIO.output(actuatorArray[1][0], GPIO.LOW)
+            GPIO.output(actuatorArray[1][1], GPIO.HIGH)
+            GPIO.output(actuatorArray[3][0], GPIO.HIGH)
+            GPIO.output(actuatorArray[3][1], GPIO.LOW)
+            time.sleep(self.inflationTime/2.0)
+            GPIO.output(actuatorArray[0][0], GPIO.LOW)
+            GPIO.output(actuatorArray[0][1], GPIO.HIGH)
+            GPIO.output(actuatorArray[2][0], GPIO.HIGH)
+            GPIO.output(actuatorArray[2][1], GPIO.LOW)
+            time.sleep(self.inflationTime/2.0)
+
     def opposingInflation(self, actuatorArray):
         for cycle in range(self.numCycles):
             GPIO.output(actuatorArray[0][0], GPIO.LOW)
