@@ -2,25 +2,25 @@
 
 import RPi.GPIO as GPIO
 import time
-import math
 
 
 class SolenoidControl:
-    def __init__(self, actuator1, actuator2, actuator3, actuator4, dutyCycle,
-                 timePeriod, maxTime):
+    def __init__(self, actuatorArray, inflationTime=0.5, numCycles=4):
         GPIO.setmode(GPIO.BOARD)
-        self.dutyCycle = dutyCycle
-        self.timePeriod = timePeriod
-        self.maxTime = maxTime
-        self.timeOn = self.timePeriod*self.dutyCycle
-        self.timeOff = self.timePeriod*(1.0-self.dutyCycle)
-        self.numCycles = int(math.ceil(self.maxTime/self.timeOn))
+        self.inflationTime = inflationTime
+        self.numCycles = numCycles
+        self.solenoidSetup(actuatorArray)
 
-    def solenoidSetup(self, actuatorNum):
-        GPIO.setup(actuatorNum[0], GPIO.OUT)
-        GPIO.setup(actuatorNum[1], GPIO.OUT)
-        GPIO.output(actuatorNum[0], GPIO.HIGH)
-        GPIO.output(actuatorNum[1], GPIO.HIGH)
+    def solenoidSetup(self, actuatorArray):
+        for actuator in range(len(actuatorArray)):
+            for valve in range(len(actuatorArray[actuator])):
+                GPIO.setup(actuatorArray[actuator][valve], GPIO.OUT)
+                GPIO.output(actuatorArray[actuator][valve], GPIO.HIGH)
+
+    def closeValves(self, actuatorArray):
+        for actuator in range(len(actuatorArray)):
+            for valve in range(len(actuatorArray[actuator])):
+                GPIO.output(actuatorArray[actuator][valve], GPIO.HIGH)
 
     def solenoidInflate(self, actuatorNum):
         print("Inflating")
@@ -38,100 +38,97 @@ class SolenoidControl:
         time.sleep(1.0)
         GPIO.output(actuatorNum[1], GPIO.HIGH)
 
-    def allInflateDeflate(self, actuator1, actuator2, actuator3, actuator4):
-        GPIO.output(actuator1[0], GPIO.LOW)
-        GPIO.output(actuator2[0], GPIO.LOW)
-        GPIO.output(actuator3[0], GPIO.LOW)
-        GPIO.output(actuator4[0], GPIO.LOW)
-        time.sleep(0.5)
-        GPIO.output(actuator1[0], GPIO.HIGH)
-        GPIO.output(actuator2[0], GPIO.HIGH)
-        GPIO.output(actuator3[0], GPIO.HIGH)
-        GPIO.output(actuator4[0], GPIO.HIGH)
-        GPIO.output(actuator1[1], GPIO.LOW)
-        GPIO.output(actuator2[1], GPIO.LOW)
-        GPIO.output(actuator3[1], GPIO.LOW)
-        GPIO.output(actuator4[1], GPIO.LOW)
-        time.sleep(0.5)
-        GPIO.output(actuator1[0], GPIO.HIGH)
-        GPIO.output(actuator2[0], GPIO.HIGH)
-        GPIO.output(actuator3[0], GPIO.HIGH)
-        GPIO.output(actuator4[0], GPIO.HIGH)
+    def deflateSnake(self, actuatorArray, scale=1.0):
+        print("Deflating snake")
+        for actuator in range(len(actuatorArray)):
+            GPIO.output(actuatorArray[actuator][1], GPIO.LOW)
+        time.sleep(self.inflationTime*scale)
+        for actuator in range(len(actuatorArray)):
+            GPIO.output(actuatorArray[actuator][1], GPIO.HIGH)
 
-    def concurrentInflation(self, actuator1, actuator2, actuator3, actuator4):
-        GPIO.output(actuator1[0], GPIO.LOW)
-        GPIO.output(actuator1[1], GPIO.HIGH)
-        GPIO.output(actuator3[0], GPIO.HIGH)
-        GPIO.output(actuator3[1], GPIO.LOW)
-        time.sleep(0.25)
-        GPIO.output(actuator2[0], GPIO.LOW)
-        GPIO.output(actuator2[1], GPIO.HIGH)
-        GPIO.output(actuator4[0], GPIO.HIGH)
-        GPIO.output(actuator4[1], GPIO.LOW)
-        time.sleep(0.25)
-        GPIO.output(actuator3[0], GPIO.LOW)
-        GPIO.output(actuator3[1], GPIO.HIGH)
-        GPIO.output(actuator1[0], GPIO.HIGH)
-        GPIO.output(actuator1[1], GPIO.LOW)
-        time.sleep(0.25)
-        GPIO.output(actuator4[0], GPIO.LOW)
-        GPIO.output(actuator4[1], GPIO.HIGH)
-        GPIO.output(actuator2[0], GPIO.HIGH)
-        GPIO.output(actuator2[1], GPIO.LOW)
-        time.sleep(0.25)
+    def inflateSnake(self, actuatorArray, scale=1.0):
+        print("Inflating snake")
+        for actuator in range(len(actuatorArray)):
+            GPIO.output(actuatorArray[actuator][0], GPIO.LOW)
+        time.sleep(self.inflationTime*scale)
+        for actuator in range(len(actuatorArray)):
+            GPIO.output(actuatorArray[actuator][0], GPIO.HIGH)
 
-    def opposingInflation(self, actuator1, actuator2, actuator3, actuator4):
-        GPIO.output(actuator1[0], GPIO.LOW)
-        GPIO.output(actuator3[0], GPIO.LOW)
-        time.sleep(0.5)
-        GPIO.output(actuator1[0], GPIO.HIGH)
-        GPIO.output(actuator3[0], GPIO.HIGH)
-        GPIO.output(actuator2[1], GPIO.LOW)
-        GPIO.output(actuator4[1], GPIO.LOW)
-        time.sleep(0.5)
-        GPIO.output(actuator2[0], GPIO.HIGH)
-        GPIO.output(actuator4[0], GPIO.HIGH)
+    def allInflateDeflate(self, actuatorArray):
+        for cycle in range(len(self.numCycles)):
+            self.inflateSnake(actuatorArray)
+            self.deflateSnake(actuatorArray)
 
+    def concurrentInflation(self, actuatorArray):
+        for cycle in range(len(self.numCycles)):
+            GPIO.output(actuatorArray[1][0], GPIO.LOW)
+            GPIO.output(actuatorArray[1][1], GPIO.HIGH)
+            GPIO.output(actuatorArray[3][0], GPIO.HIGH)
+            GPIO.output(actuatorArray[3][1], GPIO.LOW)
+            time.sleep(self.inflationTime/2.0)
+            GPIO.output(actuatorArray[2][0], GPIO.LOW)
+            GPIO.output(actuatorArray[2][1], GPIO.HIGH)
+            GPIO.output(actuatorArray[4][0], GPIO.HIGH)
+            GPIO.output(actuatorArray[4][1], GPIO.LOW)
+            time.sleep(self.inflationTime/2.0)
+            GPIO.output(actuatorArray[3][0], GPIO.LOW)
+            GPIO.output(actuatorArray[3][1], GPIO.HIGH)
+            GPIO.output(actuatorArray[1][0], GPIO.HIGH)
+            GPIO.output(actuatorArray[1][1], GPIO.LOW)
+            time.sleep(self.inflationTime/2.0)
+            GPIO.output(actuatorArray[4][0], GPIO.LOW)
+            GPIO.output(actuatorArray[4][1], GPIO.HIGH)
+            GPIO.output(actuatorArray[2][0], GPIO.HIGH)
+            GPIO.output(actuatorArray[2][1], GPIO.LOW)
+            time.sleep(self.inflationTime/2.0)
 
-if __name__ == '__main__':
-    # Initialize the actuator GPIO pins. Convention is first number is to
-    # inflate the tube, and second number is to deflate the tube.
-    # Wire with relay module and solenoids accordingly.
-    actuator1 = (37, 38)
-    actuator2 = (35, 36)
-    actuator3 = (31, 32)
-    actuator4 = (23, 24)
-    # Set up PWM control
-    dutyCycle = 1.0
-    timePeriod = 0.1
-    maxTime = 0.5
-    solenoidController = SolenoidControl(actuator1, actuator2, actuator3,
-                                         actuator4, dutyCycle, timePeriod,
-                                         maxTime)
+    def opposingInflation(self, actuatorArray):
+        for cycle in range(len(self.numCycles)):
+            GPIO.output(actuatorArray[1][0], GPIO.LOW)
+            GPIO.output(actuatorArray[1][1], GPIO.HIGH)
+            GPIO.output(actuatorArray[3][0], GPIO.LOW)
+            GPIO.output(actuatorArray[3][1], GPIO.HIGH)
+            GPIO.output(actuatorArray[2][0], GPIO.HIGH)
+            GPIO.output(actuatorArray[2][1], GPIO.LOW)
+            GPIO.output(actuatorArray[4][0], GPIO.HIGH)
+            GPIO.output(actuatorArray[4][1], GPIO.LOW)
+            time.sleep(self.inflationTime)
+            GPIO.output(actuatorArray[1][0], GPIO.HIGH)
+            GPIO.output(actuatorArray[1][1], GPIO.LOW)
+            GPIO.output(actuatorArray[3][0], GPIO.HIGH)
+            GPIO.output(actuatorArray[3][1], GPIO.LOW)
+            GPIO.output(actuatorArray[2][0], GPIO.LOW)
+            GPIO.output(actuatorArray[2][1], GPIO.HIGH)
+            GPIO.output(actuatorArray[4][0], GPIO.LOW)
+            GPIO.output(actuatorArray[4][1], GPIO.HIGH)
+            time.sleep(self.inflationTime)
 
-    solenoidController.solenoidSetup(actuator1)
-    solenoidController.solenoidSetup(actuator2)
-    solenoidController.solenoidSetup(actuator3)
-    solenoidController.solenoidSetup(actuator4)
+    def sequentialInflation(self, actuatorArray):
+        for cycle in range(len(self.numCycles)):
+            for actuator in range(len(actuatorArray)):
+                GPIO.output(actuatorArray[actuator][0], GPIO.LOW)
+                GPIO.output(actuatorArray[actuator][1], GPIO.HIGH)
+                for othActuator in range(len(actuatorArray)):
+                    if othActuator != actuator:
+                        GPIO.output(actuatorArray[othActuator][0], GPIO.HIGH)
+                        GPIO.output(actuatorArray[othActuator][1], GPIO.LOW)
+                time.sleep(self.inflationTime)
 
-    solenoidController.concurrentInflation(actuator1, actuator2, actuator3,
-                                           actuator4)
-    solenoidController.concurrentInflation(actuator1, actuator2, actuator3,
-                                           actuator4)
-    solenoidController.concurrentInflation(actuator1, actuator2, actuator3,
-                                           actuator4)
-    solenoidController.concurrentInflation(actuator1, actuator2, actuator3,
-                                           actuator4)
-    # solenoidController.solenoidInflate(actuator2)
-    # solenoidController.solenoidDeflate(actuator2)
-    #
-    # solenoidController.solenoidInflate(actuator3)
-    # solenoidController.solenoidDeflate(actuator3)
-    #
-    # solenoidController.solenoidInflate(actuator4)
-    solenoidController.solenoidDeflate(actuator1)
-    solenoidController.solenoidDeflate(actuator2)
-    solenoidController.solenoidDeflate(actuator3)
-    solenoidController.solenoidDeflate(actuator4)
+    def singularInflation(self, actuatorArray):
+        for cycle in range(len(self.numCycles)):
+            for actuator in range(len(actuatorArray)):
+                GPIO.output(actuatorArray[actuator][0], GPIO.LOW)
+                GPIO.output(actuatorArray[actuator][1], GPIO.HIGH)
+                for othActuator in range(len(actuatorArray)):
+                    if othActuator != actuator:
+                        GPIO.output(actuatorArray[othActuator][0], GPIO.HIGH)
+                        GPIO.output(actuatorArray[othActuator][1], GPIO.LOW)
+                time.sleep(self.inflationTime)
+                GPIO.output(actuatorArray[actuator][0], GPIO.HIGH)
+                GPIO.output(actuatorArray[actuator][1], GPIO.LOW)
+                time.sleep(self.inflationTime)
 
-    GPIO.cleanup()
+    def solenoidCleanup(self, actuatorArray):
+        self.closeValves(actuatorArray)
+        self.deflateSnake(actuatorArray, 2)
+        GPIO.cleanup()
