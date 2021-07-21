@@ -55,12 +55,12 @@ class SolenoidControl:
             GPIO.output(actuatorArray[actuator][0], GPIO.HIGH)
 
     def allInflateDeflate(self, actuatorArray):
-        for cycle in range(len(self.numCycles)):
+        for cycle in range(self.numCycles):
             self.inflateSnake(actuatorArray)
             self.deflateSnake(actuatorArray)
 
     def concurrentInflation(self, actuatorArray):
-        for cycle in range(len(self.numCycles)):
+        for cycle in range(self.numCycles):
             GPIO.output(actuatorArray[1][0], GPIO.LOW)
             GPIO.output(actuatorArray[1][1], GPIO.HIGH)
             GPIO.output(actuatorArray[3][0], GPIO.HIGH)
@@ -83,7 +83,7 @@ class SolenoidControl:
             time.sleep(self.inflationTime/2.0)
 
     def opposingInflation(self, actuatorArray):
-        for cycle in range(len(self.numCycles)):
+        for cycle in range(self.numCycles):
             GPIO.output(actuatorArray[1][0], GPIO.LOW)
             GPIO.output(actuatorArray[1][1], GPIO.HIGH)
             GPIO.output(actuatorArray[3][0], GPIO.LOW)
@@ -104,7 +104,7 @@ class SolenoidControl:
             time.sleep(self.inflationTime)
 
     def sequentialInflation(self, actuatorArray):
-        for cycle in range(len(self.numCycles)):
+        for cycle in range(self.numCycles):
             for actuator in range(len(actuatorArray)):
                 GPIO.output(actuatorArray[actuator][0], GPIO.LOW)
                 GPIO.output(actuatorArray[actuator][1], GPIO.HIGH)
@@ -115,7 +115,7 @@ class SolenoidControl:
                 time.sleep(self.inflationTime)
 
     def singularInflation(self, actuatorArray):
-        for cycle in range(len(self.numCycles)):
+        for cycle in range(self.numCycles):
             for actuator in range(len(actuatorArray)):
                 GPIO.output(actuatorArray[actuator][0], GPIO.LOW)
                 GPIO.output(actuatorArray[actuator][1], GPIO.HIGH)
