@@ -19,7 +19,7 @@ if __name__ == '__main__':
                       message="Select control scheme:",
                       choices=['Concurrent', 'Sequential', 'Singular',
                                'Opposing', 'All', 'Reversed Concurrent',
-                               'Pairwise'],
+                               'Pairwise', 'Inverse Sequential'],
                       ),
     ]
 
@@ -39,6 +39,8 @@ if __name__ == '__main__':
         sc.revConcurrentInflation(actuatorArray)
     elif controlScheme['control'] == 'Pairwise':
         sc.pairwiseInflation(actuatorArray)
+    elif controlScheme['control'] == 'Inverse Sequential':
+        sc.inverseSequentialInflation(actuatorArray)
     else:
         print('Undefined control scheme')
         pass

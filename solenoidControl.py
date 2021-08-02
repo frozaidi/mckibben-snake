@@ -137,6 +137,17 @@ class SolenoidControl:
                         GPIO.output(actuatorArray[othActuator][1], GPIO.LOW)
                 time.sleep(self.inflationTime)
 
+    def inverseSequentialInflation(self, actuatorArray):
+        for cycle in range(self.numCycles):
+            for actuator in range(len(actuatorArray)):
+                GPIO.output(actuatorArray[actuator][0], GPIO.HIGH)
+                GPIO.output(actuatorArray[actuator][1], GPIO.LOW)
+                for othActuator in range(len(actuatorArray)):
+                    if othActuator != actuator:
+                        GPIO.output(actuatorArray[othActuator][0], GPIO.LOW)
+                        GPIO.output(actuatorArray[othActuator][1], GPIO.HIGH)
+                time.sleep(self.inflationTime)
+
     def singularInflation(self, actuatorArray):
         for cycle in range(self.numCycles):
             for actuator in range(len(actuatorArray)):
@@ -154,23 +165,23 @@ class SolenoidControl:
     def pairwiseInflation(self, actuatorArray):
         # TODO: make a cleaner function
         for cycle in range(self.numCycles):
-            GPIO.output(actuatorArray[0][0], GPIO.LOW)
-            GPIO.output(actuatorArray[0][1], GPIO.HIGH)
             GPIO.output(actuatorArray[1][0], GPIO.LOW)
             GPIO.output(actuatorArray[1][1], GPIO.HIGH)
-            GPIO.output(actuatorArray[2][0], GPIO.HIGH)
-            GPIO.output(actuatorArray[2][1], GPIO.LOW)
-            GPIO.output(actuatorArray[3][0], GPIO.HIGH)
-            GPIO.output(actuatorArray[3][1], GPIO.LOW)
-            time.sleep(self.inflationTime)
-            GPIO.output(actuatorArray[0][0], GPIO.HIGH)
-            GPIO.output(actuatorArray[0][1], GPIO.LOW)
-            GPIO.output(actuatorArray[1][0], GPIO.HIGH)
-            GPIO.output(actuatorArray[1][1], GPIO.LOW)
             GPIO.output(actuatorArray[2][0], GPIO.LOW)
             GPIO.output(actuatorArray[2][1], GPIO.HIGH)
+            GPIO.output(actuatorArray[3][0], GPIO.HIGH)
+            GPIO.output(actuatorArray[3][1], GPIO.LOW)
+            GPIO.output(actuatorArray[0][0], GPIO.HIGH)
+            GPIO.output(actuatorArray[0][1], GPIO.LOW)
+            time.sleep(self.inflationTime)
+            GPIO.output(actuatorArray[1][0], GPIO.HIGH)
+            GPIO.output(actuatorArray[1][1], GPIO.LOW)
+            GPIO.output(actuatorArray[2][0], GPIO.HIGH)
+            GPIO.output(actuatorArray[2][1], GPIO.LOW)
             GPIO.output(actuatorArray[3][0], GPIO.LOW)
             GPIO.output(actuatorArray[3][1], GPIO.HIGH)
+            GPIO.output(actuatorArray[4][0], GPIO.LOW)
+            GPIO.output(actuatorArray[4][1], GPIO.HIGH)
             time.sleep(self.inflationTime)
 
     def solenoidCleanup(self, actuatorArray):
