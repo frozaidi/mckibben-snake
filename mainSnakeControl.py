@@ -18,7 +18,8 @@ if __name__ == '__main__':
         inquirer.List('control',
                       message="Select control scheme:",
                       choices=['Concurrent', 'Sequential', 'Singular',
-                               'Opposing', 'All', 'Reversed Concurrent'],
+                               'Opposing', 'All', 'Reversed Concurrent',
+                               'Pairwise'],
                       ),
     ]
 
@@ -36,6 +37,8 @@ if __name__ == '__main__':
         sc.allInflateDeflate(actuatorArray)
     elif controlScheme['control'] == 'Reversed Concurrent':
         sc.revConcurrentInflation(actuatorArray)
+    elif controlScheme['control'] == 'Pairwise':
+        sc.pairwiseInflation(actuatorArray)
     else:
         print('Undefined control scheme')
         pass
