@@ -180,8 +180,8 @@ class SolenoidControl:
             GPIO.output(actuatorArray[2][1], GPIO.LOW)
             GPIO.output(actuatorArray[3][0], GPIO.LOW)
             GPIO.output(actuatorArray[3][1], GPIO.HIGH)
-            GPIO.output(actuatorArray[4][0], GPIO.LOW)
-            GPIO.output(actuatorArray[4][1], GPIO.HIGH)
+            GPIO.output(actuatorArray[0][0], GPIO.LOW)
+            GPIO.output(actuatorArray[0][1], GPIO.HIGH)
             time.sleep(self.inflationTime)
 
     def solenoidCleanup(self, actuatorArray):
