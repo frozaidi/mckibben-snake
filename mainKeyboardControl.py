@@ -2,18 +2,20 @@
 
 import RPi.GPIO as GPIO
 import keyModule as km
-import os
-import pygame
 
 km.init()
 
-class endControl(Exception): pass
+
+class endControl(Exception):
+    pass
+
 
 def solenoidSetup(actuatorArray):
     for actuator in range(4):
         for valve in range(2):
             GPIO.setup(actuatorArray[actuator][valve], GPIO.OUT)
             GPIO.output(actuatorArray[actuator][valve], GPIO.HIGH)
+
 
 def main():
     if km.getKey('q'):
@@ -39,6 +41,7 @@ def main():
             for valve in range(2):
                 GPIO.output(actuatorArray[actuator][valve], GPIO.HIGH)
 
+
 if __name__ == '__main__':
 
     GPIO.setmode(GPIO.BOARD)
@@ -47,7 +50,7 @@ if __name__ == '__main__':
     actuator2 = (35, 36)
     actuator3 = (31, 32)
     actuator4 = (23, 24)
-    actuatorArray =(actuator1,actuator2,actuator3,actuator4)
+    actuatorArray = (actuator1, actuator2, actuator3, actuator4)
     solenoidSetup(actuatorArray)
     try:
         while True:
