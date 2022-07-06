@@ -24,13 +24,21 @@ Wait until a new window appears. It will be a 100px by 100px black window. This 
 - R/F : Inflate/deflate actuator 4 (respectively)
 - P : End the script. This will automatically close the `pygame` window and end the script.
 
-#### concurrentControl.py
+#### mainSnakeControl.py
 
-This script will cyclically inflate the actuators. Currently it does so 4 times before attempting to fully deflate. To run:
+This script is the main script for the various control schemes. To run:
 
 ```
-$ python3 concurrentControl.py
+$ python3 mainSnakeControl.py
 ```
+The script will then prompt the user to input an inflation time and number of cycles. It will then prompt the user to select a control scheme, which can be scrolled through using the arrow keys, and the Enter key to select. The various control schemes are as follows:
+
+- Concurrent
+- Sequential
+- Singular
+- Opposing
+- All
+- Reversed Concurrent
 
 #### deflateSnake.py
 
