@@ -65,7 +65,7 @@ if __name__ == '__main__':
     actuator_dict = (actuator1, actuator2, actuator3, actuator4)
 
     kc = KeyboardControl(actuator_dict)
-    time_limit = 10.0
+    time_limit = 100.0
     time_start = time.time()
     current_time = time.time()-time_start
     while current_time < time_limit:
