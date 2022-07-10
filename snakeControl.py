@@ -35,7 +35,7 @@ class SnakeControl():
         GPIO.cleanup()
 
     def actuation_order(self, order):
-        actuator_ord = [int(i) for i in order]
+        actuator_ord = [self.actuator_dict[int(i-1)] for i in order]
         return actuator_ord
 
     def control_signal(self, t, act_mul):
