@@ -56,8 +56,6 @@ class KeyboardControl():
 
 if __name__ == '__main__':
 
-    GPIO.setmode(GPIO.BOARD)
-
     actuator1 = (37, 38)
     actuator2 = (35, 36)
     actuator3 = (31, 32)
@@ -71,3 +69,4 @@ if __name__ == '__main__':
     while current_time < time_limit:
         kc.key_control()
         current_time = time.time()-time_start
+    kc.cleanup()
