@@ -1,7 +1,7 @@
 
 # mckibben-snake
 
-mckibben-snake is a Python library for working with the McKibben Snake v1.1.
+mckibben-snake is a Python library for working with the Helical Inflating Soft Snake Robot (HISSbot).
 
 ## Installation
 
