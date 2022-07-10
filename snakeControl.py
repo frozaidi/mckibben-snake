@@ -19,6 +19,7 @@ class SnakeControl():
         self.time_shift = self.inflation_time / time_shift
         self.actuator_dict = actuator_dict
         self.solenoid_setup(actuator_dict)
+        self.actuator_ord = self.actuation_order(order)
         self.time_start = time.time()
         self.time_limit = (self.inflation_time *
                            (self.on_multiplier + self.off_multiplier) *
@@ -34,8 +35,8 @@ class SnakeControl():
         GPIO.cleanup()
 
     def actuation_order(self, order):
-        actuation_ord = [int(i) for i in order]
-        return actuation_ord
+        actuator_ord = [int(i) for i in order]
+        return actuator_ord
 
     def control_signal(self, t, act_mul):
         t = round(t)
