@@ -32,8 +32,8 @@ class SnakeControl():
                 GPIO.output(actuator_dict[actuator][valve], GPIO.HIGH)
 
     def cleanup(self):
-        for actuator in range(len(self.actuator_dict)):
-            GPIO.output(self.actuator_dict[actuator][1], GPIO.LOW)
+        for actuator in range(len(self.actuator_ord)):
+            GPIO.output(self.actuator_ord[actuator][1], GPIO.LOW)
         time.sleep(self.inflation_time*2)
         GPIO.cleanup()
 
