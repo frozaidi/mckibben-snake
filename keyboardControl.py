@@ -71,4 +71,3 @@ if __name__ == '__main__':
         if km.getKey('p'):
             break
         current_time = time.time()-time_start
-    kc.cleanup()
