@@ -87,4 +87,3 @@ if __name__ == '__main__':
     sc = SnakeControl(actuator_dict, inflation_time, on_multiplier,
                       off_multiplier, cycle_amount, time_shift, order)
     sc.snake_control()
-    sc.cleanup()
