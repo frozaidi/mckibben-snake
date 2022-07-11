@@ -68,5 +68,7 @@ if __name__ == '__main__':
     current_time = time.time()-time_start
     while current_time < time_limit:
         kc.key_control()
+        if km.getKey('p'):
+            break
         current_time = time.time()-time_start
     kc.cleanup()
